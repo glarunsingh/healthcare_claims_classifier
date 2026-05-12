@@ -1,86 +1,40 @@
-# Healthcare Claim Injury Classification System
+# Healthcare Claim Injury Classification — Spec-Driven Design
 
-> **Spec-Driven Development (SDD) — Complete Artifact Set**
-
-This repository uses Spec-Driven Development. AI coding agents and human developers MUST read the spec documents before writing implementation code.
+> **POC** — Classify healthcare injury claims as Work-Related, Non-Work-Related, or Undetermined using an AI/LLM, reading from and writing to Excel.
 
 ---
 
-## Quick Start for AI Agents (Cursor / Copilot / Cody)
+## Quick Summary
 
-**Before implementing anything, read these files in order:**
-
-1. **Spec** → [`.spec/specs/claim-classification.md`](.spec/specs/claim-classification.md) — *What* we're building and *why*
-2. **Plan** → [`.spec/plans/claim-classification-plan.md`](.spec/plans/claim-classification-plan.md) — *How* we'll build it (architecture, stack, API contracts)
-3. **Tasks** → [`.spec/tasks/claim-classification-tasks.md`](.spec/tasks/claim-classification-tasks.md) — *Work units* with dependencies and acceptance tests
-4. **Rules** → [`.spec/rules/sdd-standards.md`](.spec/rules/sdd-standards.md) — *Enforcement rules* for implementation
+**Input:** Excel file with claim ID, date, and supporting document text columns  
+**Output:** Same Excel with classification, confidence score, reasoning, and excerpts appended  
+**How:** Python script calls GPT-4o for each claim row, parses structured JSON response  
 
 ---
 
-## SDD Phases
+## SDD Documents (Read in Order)
 
-| Phase | Document | Status |
+| Phase | Document | Purpose |
 |---|---|---|
-| **1. SPECIFY** | [claim-classification.md](.spec/specs/claim-classification.md) | Complete |
-| **2. PLAN** | [claim-classification-plan.md](.spec/plans/claim-classification-plan.md) | Complete |
-| **3. TASKS** | [claim-classification-tasks.md](.spec/tasks/claim-classification-tasks.md) | Complete |
-| **4. IMPLEMENT** | Source code in `app/` | Not Started |
+| 1. SPECIFY | [specs/claim-classification.md](specs/claim-classification.md) | What we're building — requirements, examples, acceptance criteria |
+| 2. PLAN | [plans/plan.md](plans/plan.md) | How we'll build it — tech stack, architecture, data flow |
+| 3. TASKS | [tasks/tasks.md](tasks/tasks.md) | Step-by-step implementation tasks with pseudocode |
+| 4. IMPLEMENT | [rules/rules.md](rules/rules.md) | Coding rules, validation checklist, future roadmap |
 
 ---
 
-## Project Summary
+## Source of Truth
 
-An AI-powered system that classifies healthcare claim injuries as:
-
-- **WORK_RELATED** — Injury occurred during work hours, on work premises, or performing work duties
-- **NON_WORK_RELATED** — Injury occurred outside of work
-- **UNDETERMINED** — Insufficient or conflicting evidence
-
-With an optional secondary tag:
-- **WORK_AGGRAVATED** — A non-work injury that was worsened by work activities
-
-Key capabilities:
-- Document ingestion (claim forms, doctor notes, transcripts, incident reports)
-- AI-powered classification with confidence scoring
-- Confidence-based escalation to human reviewers
-- Reviewer approval and override workflow
-- Immutable, auditable decision trail
+The original client requirements are in [userstory.md](../userstory.md) (root of repo).
 
 ---
 
-## Getting Started (Implementation)
+## Assumptions
 
-> **Prerequisites:** API key for an LLM provider (OpenAI, Azure OpenAI, or Anthropic)
+All assumptions are listed in the SPECIFY doc. Key ones:
 
-```bash
-# 1. Clone the repo
-git clone <repo-url> && cd healthcare_claims_classifier
-
-# 2. Copy environment config
-cp .env.example .env
-# Edit .env with your API keys and database URL
-
-# 3. Start services (after implementation)
-docker compose up
-
-# 4. Run tests
-pytest
-```
-
----
-
-## User Story
-
-See [userstory.md](userstory.md) for the original business requirements.
-
----
-
-## Folder Structure
-
-```
-.spec/
-├── specs/          # Phase 1: What and why (functional requirements)
-├── plans/          # Phase 2: How (architecture, tech stack, API design)
-├── tasks/          # Phase 3: Work units (discrete, testable tasks)
-└── rules/          # Enforcement rules for AI agents and developers
-```
+- Excel input only (no PDFs, no images, no APIs)
+- Document text is already extracted and pasted into Excel columns
+- GPT-4o via OpenAI SDK (can switch to Azure OpenAI)
+- Sequential processing (no parallelism needed for POC)
+- This is a **POC for client demonstration**, not production code
