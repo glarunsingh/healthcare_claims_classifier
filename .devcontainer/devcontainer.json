@@ -1,0 +1,24 @@
+{
+  "name": "Python 3.11 Dev",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "python -m pip install --upgrade pip && pip install -r requirements.txt || true",
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "ms-ossdev.copilot"
+      ]
+    }
+  },
+  "forwardPorts": [8000],
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.venv,target=/home/vscode/.venv,type=bind,consistency=cached"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "none"
+}
